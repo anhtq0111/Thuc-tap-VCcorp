@@ -6,7 +6,7 @@
 - Các lớp : 
     - Lớp interface : IRepository gồm 4 phương thức add, getAll, update, delete, sử dụng overload ở phương thức add để test polymorphism
     - Lớp triển khai: StudentRepository, thêm phương thức test để test static
-    - Lớp Student gồm 3 thuộc tính id, name, age
+    - Lớp Student gồm 3 thuộc tính id, name, age tuân theo tính đóng gói, các phương thức truy cập và cập nhật thuộc tính được định nghĩa public
 
 ## 1.2. Yêu cầu (2) Đọc ghi file
 
