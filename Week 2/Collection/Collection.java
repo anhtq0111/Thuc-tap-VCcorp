@@ -34,6 +34,8 @@ public class Collection {
         test.put("test3", 22);
         System.out.println(test);
 
+        
+
         //hashCode and equals
 
         Set<TestClass> personSet = new HashSet<>();

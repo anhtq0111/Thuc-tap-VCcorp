@@ -67,6 +67,7 @@ public class file {
                 System.out.print((char) data);
             }
             input.close();
+
         } catch (IOException e) {
             // TODO: handle exception
             e.printStackTrace();

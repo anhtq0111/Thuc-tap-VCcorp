@@ -4,3 +4,11 @@ Là những trường hợp không mong muốn hoặc lỗi có thể xảy ra t
 Có thể xử lý exception bằng khối try-catch-finally
 
 Hệ thống exception : ![alt text](image.png)
+
+Checked : 
+
+    Thường xảy ra do yếu tố bên ngoài chương trình, vào thời điểm compile
+
+Unchecked : 
+
+    Thường xảy ra do lỗi lập trình ở trong chương trình

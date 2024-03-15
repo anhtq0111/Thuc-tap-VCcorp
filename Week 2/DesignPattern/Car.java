@@ -29,7 +29,7 @@ public class Car implements Iterable<String> {
  
   // Method 2
   // Implementing the iterator method and
-  // adding your own implementation
+  // adding implementation
   @Override
   public Iterator<String> iterator() {
     Iterator<String> it = new Iterator<String>() {
