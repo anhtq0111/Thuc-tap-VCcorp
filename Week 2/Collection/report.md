@@ -1,6 +1,6 @@
 # Collections
 
-- ArrayList, HashSet, HashMap :  đều là một phần của Java Collections FrameWork.
+- ArrayList, HashSet, HashMap :  đều là một phần của Java Collections FrameWork. - how it work when add or compare
     - ArrayList
         
         Triển khai từ List interface

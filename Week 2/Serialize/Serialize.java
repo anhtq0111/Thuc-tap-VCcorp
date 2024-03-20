@@ -1,12 +1,23 @@
-//java code for final with transient
 
 import java.io.*;
 
 
 class Dog implements Serializable{
-		int i=10;
-		final int j=20;
+		int i;
+		final int j;
+		C dff;
+
+		public Dog() {
+			this.i = 10;
+			this.j = 20;
+		}
+
 }
+ 
+class C {
+
+}
+
 class Serialize {
 	public static void main (String[] args)throws IOException,ClassNotFoundException 
 	{

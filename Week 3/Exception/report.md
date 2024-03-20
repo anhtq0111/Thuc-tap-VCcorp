@@ -3,6 +3,8 @@ Là những trường hợp không mong muốn hoặc lỗi có thể xảy ra t
 
 Có thể xử lý exception bằng khối try-catch-finally
 
+what is throw
+
 Hệ thống exception : ![alt text](image.png)
 
 Checked : 

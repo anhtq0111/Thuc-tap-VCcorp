@@ -11,3 +11,5 @@
 ## 1.2. Yêu cầu (2) Đọc ghi file
 
 - Chương trình đọc ghi file theo định dạng Binary và Text, list các file, đọc nội dung các file
+
+- different : Size of file. Can store a file with size of 1 byte in binaryfile. But every char in textfile is a byte

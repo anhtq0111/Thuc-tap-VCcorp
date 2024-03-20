@@ -12,7 +12,7 @@ public class StudentRepository implements IRepository<Student>{
     public void add(){
         System.out.println("Polymorphism");
     }
-
+    
     @Override
     public void add(Student student) {
         students.add(student);

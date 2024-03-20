@@ -12,7 +12,7 @@
 
     Để giải quyết race condition, ta có thể dùng đồng bộ ngầm synchronized hoặc dùng Lock interface. 
 
-- Triển khai Lock:
+- Triển khai Lock: what is different bt read and write
 
     ReentrantLock: Khóa loại trừ lẫn nhau, gần giống như synchronized
 
@@ -21,6 +21,8 @@
     StampedLock: Tương tự như ReadWriteLock nhưng hàm lock trả về một biến có kiểu giá trị là long
 
     Semaphore: Giới hạn số permit bằng một giá trị n do đó không quá n thread được phép cùng thực thi
+
+    what is dielock-deadlock
 
 - Atomic operation: 
 
