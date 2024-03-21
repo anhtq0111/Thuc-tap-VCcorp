@@ -22,7 +22,7 @@
 
     Semaphore: Giới hạn số permit bằng một giá trị n do đó không quá n thread được phép cùng thực thi
 
-    what is dielock-deadlock
+    what is deadlock: when a thread is hold a resource for a long time. Then other thread is blocked indenfinitely when waiting for resource
 
 - Atomic operation: 
 
