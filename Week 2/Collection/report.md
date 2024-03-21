@@ -32,7 +32,16 @@
         Các phương thức : get, put, remove
 
 - HashCode và Equals : dùng để check sự duy nhất của một phần tử trong set trước khi thêm một phần tử khác.
-    - hashCode : trả về số là vị trí của phần tử trong bảng hash
-    - equals : trả về đối tượng đó có giống đối tượng đã có trong set hay không
+    - hashCode : return hash value of an object and use to compute of object in hash table
+    - equals : return true if two object has the same memory location.
+        - Ex: int a = new Int(1); 
+        
+            int b = new Int(1); 
+        
+            int c = a; 
 
-    
+            a.equals(b) //false
+
+            a.equals(c) //true
+
+    - So when add new object to a set of object with same type, we should override hashCode and equals method.

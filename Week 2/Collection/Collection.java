@@ -10,7 +10,7 @@ public class Collection {
         ArrayList<String> name = new ArrayList<>();
         HashSet<Integer> age = new HashSet<>();
         HashMap<String, Integer> test = new HashMap<>();
-
+        
         //Test ArrayList 
         name.add("test1");
         name.add("test2");

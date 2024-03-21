@@ -10,6 +10,7 @@ Structural Design Patterns : Tập trung vào thành phần của các lớp ho�
 
 Behavioral Design Patterns : Tập trung xử lý sự giao tiếp và tương tác giữa các đối tượng và các lớp.
 
-    Iterator Method : Là một design pattern thuộc nhóm hành vi, cung cấp khả năng điều hướng mà không làm lộ cấu trúc của đối tượng - explain
+    Iterator Method : Là một design pattern thuộc nhóm hành vi, cung cấp khả năng điều hướng mà không làm lộ cấu trúc của đối tượng. 
+        Case: Iterate a CarStore but don't care how it store. If don't use iterator method, we have to know how it store to access (like arrayList or Set or Map)
 
 
