@@ -11,7 +11,11 @@ Concurrency:
 
 Optimizers: responsible for determining the most efficient way to execute a SQL statement. It evaluates different query execution plans and chooses the one that it estimates will have the lowest cost, where cost is defined as the amount of resources (e.g. CPU, I/O) required to execute the query (Query performance Optimization)
 
-Storage engine: Storage engines are MySQL components that handle the SQL operations for different table types to store and manage information in a database
+Storage engine: Storage engines are MySQL components that handle the SQL operations for different table types to store and manage information in a database. To determine what storage engine a particular table uses, use the SHOW TABLE STATUS command.
+- MyISAM Engine
+- MyISAM Merge Engine
+- InnoDB Engine
+- Memory Engine
 
 
 
