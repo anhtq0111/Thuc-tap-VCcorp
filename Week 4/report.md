@@ -29,6 +29,27 @@ Storage engine: Storage engines are MySQL components that handle the SQL operati
 
 - SET autocommit disables or enables the default autocommit mode for the current session.
 
+# Bad mySQL query
+- Select * : 
+  - For large tables, this can be slow and inefficient. Specify the exact columns you need instead.
+  - select * from a -> select x, y from a
+- Missing alias :
+  - Improves readability and avoids ambiguity in column names.
+  - select tableA.x, tableB.z, tableB.y from tableA, tableB where tableA.x = tableB.x -> select A.x, B.z, B.y from tableA as A join tableB as B on A.x = B.x
+- Full table scan :
+  - Scan the entire table are slow. Should use Where to target specific data
+  - SELECT * FROM a  -> SELECT * FROM a WHERE x = 'x'
+- Missing parentheses :
+  - SELECT
+  e.emp_no, e.first_name, e.last_name, s.salary
+  FROM employees e
+  JOIN salaries s ON e.emp_no = s.emp_no
+  WHERE (e.first_name = "Ana" OR e.first_name = "Joey")
+  AND s.salary >= 10000
+  - Without parentheses, the result will be all the Ana, regardless of salaries, and all the Joey who make at least $10,000.
+- Missing limit:
+  - SELECT x, y FROM a -> SELECT TOP 100 x, y FROM a
+
 ### ACID
 ACID stands for Atomicity, Consistency, Isolation, and Durability, is properties of transactions
 - Atomicity in a database transaction means that all the changes made during that transaction are treated as one "bundle" of changes. This means that when you are trying to modify your database, it's either all of the changes happen at the same time, or none of them happen at all.
