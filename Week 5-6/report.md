@@ -104,3 +104,62 @@ The Resource Manager restarts the ApplicationMaster in a different container man
 - Node manager: Resource Manager restarts any failed tasks or ApplicationMasters running on the failed Node Manager on other, healthy nodes.
 However, map tasks completed on the failed node must be re-run.
 - RM: Usually, two Resource Managers are run together as a pair in an active/standby configuration.
+
+
+# HDFS
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/9c6c5fea-1db0-4fd9-8bf9-50d9d1288472)
+
+- The clients talk to the Namenode to read or write a file. The Namenode responds with the location of the right Datanodes for the client to send or receive data.
+The client then contacts the Datanodes specified by the Namenode for writing or reading data blocks. The clients and the Datanodes communicate directly to avoid making the Namenode a bottleneck.
+
+### HDFS block
+- HDFS is not a physical filesystem, but rather a virtual abstraction over distributed disk-based file systems.
+- A file in HDFS is logically divided up into HDFS blocks. Each HDFS block is physically made of filesystem blocks.
+- The filesystem block is often an integral multiple of disk blocks
+- Default hdfs block size : 128MB
+- Each HDFS block is stored as a file on a data node and replicated across the cluster equal to the number specified by the property dfs.replication.
+
+### Block replication
+- Replication ensures that if one data block becomes corrupted or hardware failure occurs, then the read request can still be fulfilled by another available clone of the block. 
+- Hadoop places the first replica on the same node as the client. If the client is runnning outside the cluster, a node is chosen at random. The second replica is placed on a randomly chosen rack different than the first replica. The third replica is placed on a randomly chosen node on the same rack as the second replica. Any further replicas are placed on randomly selected nodes without placing too many replicas in the same rack.
+
+### Namenode
+- Namenode maintains the filesystem tree and all metadata for all files and directories in the tree.
+- FSimage :  represents the file system’s state after all modifications up to a specific transaction ID.
+- EditLog : a transaction journal or log containing records for every change that occurs to the file system’s metadata after the most recent FS image.
+- Namenode starts up, it picks the FS image and applies the edit log to get the latest state of the file system’s metadata.
+ Next, the Namenode writes the new HDFS state to the FS image and starts normal operation with an empty edit file
+- A huge edit log takes longer to process, thus increasing the start-up time for the Namenode.
+- Secondary Namenode periodically merges the edit log with FS image so the edit log does not grow beyond a reasonable limit.
+- Secondary Namenode is run on a different machine because it requires similar computer and memory resources as the Namenode itself.
+- Namenode is a single point of failure
+  - using backups
+  - using secondary namenode
+  - using standby namenode
+- Limits by memory of namenode
+
+### Datanode
+- Datanode stores the actual data. It stores the data blocks on its local filesystem and sends a block report to the Namenode.
+- default value of directory is ＄{hadoop.tmp.dir}/dfs/data.
+### Write path
+- client wait -> contact to namenode -> namenode check -> return list of datanode -> client write to datanode in portions -> datanode write data to local repository and transferring to next datanode
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/201123e1-d5d4-4141-8136-0fb9bc533ac2)
+
+### Read path
+- namenode return list datanode foreach requested block, is sorted by proximity to the client
+- If an error occurs when communicating with a Datanode, the next closest Datanode hosting the copy of the data block is tried.
+The failed Datanode is remembered so that it does not retrieve any blocks in future.
+- The received blocks are tested for corruption by computing their checksums. If the checksum does not match, a replica of the same block is read from a different Datanode.
+### High Availability
+- Is defined as the ability of a system or system component to be continuously operational for a long period of time
+- In HA setup, one Namenode serves client queries and is known as the Active Namenode. The rest are known as standby Namenodes. If the active Namenode experiences a failure, a standby Namenodes takes over.
+- standby namenode deploy journal node
+  - JournalNodes keep a record of all the changes the active Namenode makes on its namespace.
+  -  need more than one JournalNode to record Namenode’s activities because JournalNodes themselves are prone to failure. (N -> the number of failures a JournalNode will tolerate (N-1)/2)
+  -  In an HA cluster, the Datanodes send block reports and heartbeats to both the active and standby NameNodes.
+  -  JournalNodes must ensure that there can only be one active Namenode that can write to them
+-  NFS : standby namenode monitor shared dir (editlog) to apply change
+
+### Distcp tool
+- Distcp tool allows for parallel processing of files on the same Hadoop cluster or between two Hadoop clusters.
+- 
