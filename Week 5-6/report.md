@@ -202,5 +202,47 @@ The failed Datanode is remembered so that it does not retrieve any blocks in fut
 The client machine is responsible for maintaining the driver process, while the cluster is responsible for maintaining the executor processes.
 
 ### Life circle
+- user submit : spark-submit -> spawn process talk to cluster manager (YARN -> RM create spark driver on one node)
+- driver start - establish SparkSession when set up Spark cluster (The driver process and the executor processes are collectively referred to as the Spark cluster).
+SparkSession is a unified single point of entry to interact with underlying Spark functionality. It allows programming Spark with DataFrame and Dataset APIs.
+The SparkSession talks to the cluster manager daemon, in our case the RM, to launch Spark executor processes on worker nodes.
+- RM return location of executor process to driver, driver communicate directly with the executor processes.
+- The driver assigns tasks to executor processes and job execution begins. Data may be moved around and executors report on their status to the driver.
+- The driver exits when the Spark job completes and the cluster manager shuts down the executor processes on behalf of the driver.
 
+## Spark APIs 
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/9ead1abe-9b84-4bbc-b661-f2565a3b3457)
+
+### Resilient Distributed Datasets
+- the fundamental data-structure abstraction in Spark.
+- Low-level APIs
+- Immutable
+- partitioned across cluster, can constructed when failure
+- discourage working directly
+- Spark RDDs can be cached and manually partitioned
+- Create RDDs from local collections : parallelize(...) method exposed by the SparkContext
+- Create RDDs from data sources : SparkContext
+- Creating RDDs from DataFrames & Datasets
+
+### DataFrames
+- table with rows and columns
+- columns defined type maintained by schema
+- data distributed across machine in cluster (partition)
+- The number of partitions also dictate the parallelism achieved in a Spark job
+- partitions are never manually or individually manipulated
+
+### Datasets 
+- A Dataset is a strongly-typed, immutable collection of objects that are mapped to a relational schema.
+- Main different with DataFrames :
+  -   Schema: dataframe difined schema at runtime. Datasets have a schema defined at compile time. This is achieved by specifying a case class in Scala or a class in Java that defines the structure and data types of each column.
+  -   Type-safety: Dataframe are not strongly type. They represent data as generic Rows, which can hold different data types in each column. This allows for flexibility but can lead to potential runtime errors if data types mismatch operations. Datasets are strongly type. Enforcing types at compile time helps prevent errors due to data type mismatches during operations. This improves code reliability and allows for better IDE support with features like autocompletion.
+  -   Use-case: Datasets are ideal for production-grade Spark applications where data quality and type safety are crucial. Their strong typing enables faster execution due to optimized code generation by the Spark compiler. DataFrames are a good choice for working with exploratory data analysis or when the data schema might be evolving during processing. Their SQL-like operations make them easy to use for various data manipulations.
+
+### Anatomy of Spark Application
+
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/0edcc920-debc-4226-a3c6-ebc2390b4977)
+
+- A stage is roughly equivalent to a map or reduce phase in MapReduce.
+-  stage is split into tasks by the Spark runtime and executed in parallel on partitions of an RDD across the cluster.
+-  
 
