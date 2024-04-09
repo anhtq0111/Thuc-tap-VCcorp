@@ -109,8 +109,10 @@ However, map tasks completed on the failed node must be re-run.
 # HDFS
 ![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/9c6c5fea-1db0-4fd9-8bf9-50d9d1288472)
 
+- Designed for store large file, streaming data access, commodity hardwware
 - The clients talk to the Namenode to read or write a file. The Namenode responds with the location of the right Datanodes for the client to send or receive data.
 The client then contacts the Datanodes specified by the Namenode for writing or reading data blocks. The clients and the Datanodes communicate directly to avoid making the Namenode a bottleneck.
+- Unsuitable for low latency, data access, numerous small files
 
 ### HDFS block
 - HDFS is not a physical filesystem, but rather a virtual abstraction over distributed disk-based file systems.
@@ -143,6 +145,7 @@ The client then contacts the Datanodes specified by the Namenode for writing or 
 - default value of directory is ＄{hadoop.tmp.dir}/dfs/data.
 ### Write path
 - client wait -> contact to namenode -> namenode check -> return list of datanode -> client write to datanode in portions -> datanode write data to local repository and transferring to next datanode
+
 ![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/201123e1-d5d4-4141-8136-0fb9bc533ac2)
 
 ### Read path
@@ -150,6 +153,9 @@ The client then contacts the Datanodes specified by the Namenode for writing or 
 - If an error occurs when communicating with a Datanode, the next closest Datanode hosting the copy of the data block is tried.
 The failed Datanode is remembered so that it does not retrieve any blocks in future.
 - The received blocks are tested for corruption by computing their checksums. If the checksum does not match, a replica of the same block is read from a different Datanode.
+
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/70346408-6a12-4b6f-818e-63cc73b7af73)
+
 ### High Availability
 - Is defined as the ability of a system or system component to be continuously operational for a long period of time
 - In HA setup, one Namenode serves client queries and is known as the Active Namenode. The rest are known as standby Namenodes. If the active Namenode experiences a failure, a standby Namenodes takes over.
@@ -162,4 +168,39 @@ The failed Datanode is remembered so that it does not retrieve any blocks in fut
 
 ### Distcp tool
 - Distcp tool allows for parallel processing of files on the same Hadoop cluster or between two Hadoop clusters.
-- 
+
+
+# Spark
+- Spark, the ubiquitous platform for data processing, and has taken over the traditional MapReduce framework.
+### Compare to MapReduce
+- Iterative job : When disk I/O is involved, job execution time increases manifold when compared to the same data accessed from main memory.
+- Interactive analysis: MapReduce read data from disk, increase latency
+- Rich API: offering a variety of rich APIs
+- Spark excels at an efficient reuse of data by caching it in memory across the cluster, saving costly round-trips to disk
+
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/52496bd2-f4cc-43a2-8488-710755762ee5)
+
+### Architecture 
+- Driver :  the master process that manages the execution of a Spark job
+- Excecutors : the slave processes that execute the code assigned to them by the driver process.
+
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/6e4e78f9-a347-42f3-a6cd-a7c88d6bdc36)
+
+### Cluster manager
+- The Spark driver negotiates resources with the cluster manager to launch executor processes
+- Spark is compatible with 
+  -   Hadoop YARN
+  -   Apache Mesos
+  -   Built-in standalone cluster manager
+  -   Kubernetes
+  -   Local mode
+### Execution modes
+- Cluster mode: user submit job to cluster manager -> cluster manager spawn driver and executor on woker node. Both driver and executor live in cluster
+
+
+- Client mode : driver live in client machine out side the cluster.
+The client machine is responsible for maintaining the driver process, while the cluster is responsible for maintaining the executor processes.
+
+### Life circle
+
+
