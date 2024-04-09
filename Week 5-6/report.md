@@ -244,5 +244,9 @@ The SparkSession talks to the cluster manager daemon, in our case the RM, to lau
 
 - A stage is roughly equivalent to a map or reduce phase in MapReduce.
 -  stage is split into tasks by the Spark runtime and executed in parallel on partitions of an RDD across the cluster.
--  
+-  transformations are lazily evaluated meaning they are not performed until an action is performed on an RDD.
+-  Kind of transformations:
+  -   Narrow: one partition -> one partition
+  -   Wide : many partition -> many partition
+- each action corresponds to one Spark job.
 
