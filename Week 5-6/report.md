@@ -242,11 +242,66 @@ The SparkSession talks to the cluster manager daemon, in our case the RM, to lau
 
 ![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/0edcc920-debc-4226-a3c6-ebc2390b4977)
 
+- Each Spark job constitutes a directed acyclic graph (DAG) of stages.
 - A stage is roughly equivalent to a map or reduce phase in MapReduce.
--  stage is split into tasks by the Spark runtime and executed in parallel on partitions of an RDD across the cluster.
--  transformations are lazily evaluated meaning they are not performed until an action is performed on an RDD.
--  Kind of transformations:
+- stage is split into tasks by the Spark runtime and executed in parallel on partitions of an RDD across the cluster.
+- Eeach stage can consist of one of two task types. One is shuffle. The other is result task.
+- A task is a combination of data blocks and a set of transformations that will be applied to that data.
+If there’s a single partition, there will be one task. If there are ten partitions, there will be ten tasks that can execute in parallel. 
+  -   Shuffle map task : similar to the map-side part of the shuffle in MapReduce, run in all stages except the final stage, runs a computation on one RDD partition, writes its output to a new set of partitions, to disk
+  -   Result task : run in the last stage and return a result to the user’s program
+- transformations are lazily evaluated meaning they are not performed until an action is performed on an RDD.
+- Kind of transformations :
   -   Narrow: one partition -> one partition
   -   Wide : many partition -> many partition
 - each action corresponds to one Spark job.
+- Pipelining: performs as many steps as possible before initiating a write to disk,
+any sequence of operations that doesn’t require moving data across nodes, feeds into one another are collapsed into a single stage
+- Shuffle persistence : Tasks write to shuffle files on their local disk.  The shuffle files are persisted; they can be reused if another job operates on the same input data or if reduction fails on a node and needs to be executed again.
+### Execution of a Spark Application
+- DAG scheduler : breaks a job into a directed acyclic graph (DAG) of stages and constituent tasks, skip stages for computing RDDs that have been persisted earlier, considers data locality when requesting placement preference for tasks.
+- Task scheduler : responsible for submitting (shuffle or results) tasks from each stage to the cluster, receives a list of tasks and matches them with executors. The executors are assigned tasks in the following preference:
+  -   Process-local tasks
+
+  -   Node-local tasks
+
+  -   Rack-local tasks
+
+  -   Arbitrary nonlocal tasks
+- If the task fails, it is resubmitted by the task scheduler onto another executor.
+- Before executing the task, the executor makes sure jar and file dependencies are up to date
+- the task code is deserialized and is received as part of the launch task message
+- the task code is executed in the same JVM as the executor
+- result is serialized and sent back to the executor backend which forwards it to the driver as a status message update.
+
+
+# Input & Output format
+## Sequence file 
+### Intro
+- Can be used as a persistent data-structure to store binary key-value pairs.
+- Can be used as a container for smaller files. In the case of storing small files as a sequence file, the names of the files become the key and the value their content.
+- Three forms :
+  -   Uncompressed
+  -   Record compressed
+
+  ![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/43db3afd-5fb2-41f7-9362-523b928cc1c7)
+
+  - Block compressed
+  
+  ![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/906bcba9-3e8b-4709-9202-703c09712c95)
+
+- Header:  contains metadata information such as the class names of the key and value classes, compression details, user-defined metadata, and the sync marker.
+
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/dc326cff-6520-4a50-a7fd-7870b77e0c37)
+
+- An individual record comprises of four parts:
+  -   Record length
+  -   key length
+  -   key
+  -   value
+- sync marker:  Sync points make it possible for multiple map tasks to read and processes independent portions of a sequence file
+
+### Read and write
+
+
 
