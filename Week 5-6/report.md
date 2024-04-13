@@ -12,8 +12,7 @@ Hadoop is a reliable, distributed, and scalable platform for storing and analyzi
 
 
 
-- Resource Manager:the ultimate authority that arbitrates resources among all the applications in the system. From Hadoop 2.4, A pair of Resource Managers runs in active/standby 
-configuration to achieve high availability. If the active Resource Manager dies, then the standby one becomes the active and the cluster continues to function correctly. Consist of 2 part
+- Resource Manager:the ultimate authority that arbitrates resources among all the applications in the system. Consist of 2 part
   -   Applications Manager: is responsible for accepting job submissions and starting a container for an entity called the ApplicationMaster
   -   Scheduler: The scheduler is responsible for allocating resources such as disk, CPU, and network running applications, subject to restrictions imposed by queues and capacity.
 
@@ -39,6 +38,9 @@ Isn’t suitable for a shared cluster. A large job could deny smaller jobs from 
 - Capacity Scheduler: defines queues with each queue being allocated a fraction of the cluster resources.
 A queue can be divided further into sub-queues in a hierarchicaly. jobs are executed in a FIFO manner.
 A job can be destined for a queue using the property mapreduce.job.queuename. If skipped, the job is sent to the default queue.
+
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/36140176-2f40-4b99-920a-64464531345c)
+
 - Fair Scheduler: attempts to allocate resources fairly among all the running applications.
 Queues can also be assigned weights and each queue can have nested child queues.
 - Delay scheduler: the scheduler doesn’t loosen the data locality constraints immediately to schedule a container elsewhere, if a container can’t be started on the same node on which the data lives.
@@ -276,8 +278,7 @@ any sequence of operations that doesn’t require moving data across nodes, feed
 
 
 # Input & Output format
-## Sequence file 
-### Intro
+### Sequence file 
 - Can be used as a persistent data-structure to store binary key-value pairs.
 - Can be used as a container for smaller files. In the case of storing small files as a sequence file, the names of the files become the key and the value their content.
 - Three forms :
@@ -301,7 +302,109 @@ any sequence of operations that doesn’t require moving data across nodes, feed
   -   value
 - sync marker:  Sync points make it possible for multiple map tasks to read and processes independent portions of a sequence file
 
-### Read and write
+### Read and write Sequence file
+- writer = SequenceFile.createWriter(fs, config, path, Text.class, Car.class, SequenceFile.CompressionType.RECORD);
+- reader = new SequenceFile.Reader(fs, path, config);
 
+### SerDe
+- Serializer/Deserializer
+- Encoding an object as a byte stream is called serializing the object.
+- serialize an object using a particular technology, the serialized object cannot be deserialized using another technology.
+- a serialization system should address the following concerns:
+  -   Minimizing Data on Wire
+  -   Portability
+  -   Versioning
+  -   Data Integrity
+### Rows vl Columnar databases
+- Rows format
+
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/79bb6ce6-6bf0-4793-98c9-bebe39ed0a72)
+
+- Columnar format:
+  -   query times can be significantly reduced if only the required column values are read-in, instead of entire rows.
+  -   ability to store a database table in less space than required to store the same table in row format.
+
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/dfc8c7ac-62fe-47c4-a970-762c5ddcc81c)
+
+### Avro
+- a data serialization system that allows for remote procedure calls and the fast and compact serialization of data.
+- Avro schemas are defined using JSON
+- a higher abstraction, the Avro IDL language, lets developers specify schemas in a form readable for people
+#### Json schema
+- import org.apache.avro.generic.GenericRecord;
+- ReadSchema:
+  -     Schema schema = new Schema.Parser().parse(new File("./car.avsc"));
+- Create record:
+  -     GenericRecord porsche = new GenericData.Record(schema);
+        porsche.put("make", "Porsche");
+        porsche.put("model", "911");
+        porsche.put("year", 2019);
+        porsche.put("horsepower", 443);
+- Write record to file
+  -     File file = new File("output/fancyCars.avro");
+        DatumWriter<GenericRecord> datumWriter = new GenericDatumWriter<>(schema);
+        DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<>(datumWriter);
+        dataFileWriter.create(schema, file);
+        dataFileWriter.append(porsche);
+        dataFileWriter.close();
+
+- Read avro file
+  -     
+            public void deserializeAvroFile() throws IOException {
+              DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
+              DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(new File("./fancyCars.avro"), datumReader);
+
+              Schema schema = dataFileReader.getSchema();
+              System.out.println("Data from fancyCars.avro :");
+              GenericRecord record = null;
+              while (dataFileReader.hasNext()) {
+                  record = dataFileReader.next(record);
+                  System.out.println(record);
+              }
+            }
+        
+- use the avro-tools jar file to compile the schema
+  -      java -jar /path/to/avro-tools-1.9.1.jar compile schema <schema file> <destination>
+  -      DatumWriter<Car> datumWriter = new SpecificDatumWriter<>(Car.class);
+         DataFileWriter<Car> dataFileWriter = new DataFileWriter<>(datumWriter);
+         dataFileWriter.create(porsche.getSchema(), file);
+  -      Car car = null;
+         while (dataFileReader.hasNext()) {
+            car = dataFileReader.next(car);
+            System.out.println(car.getYear());
+         }
+#### Avro IDL
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/c0f1f1a1-9807-4d90-8c18-1e65689be2ff)
+
+- Each Avro IDL file defines a single Avro Protocol. When compiled, the output is a JSON format Avro Protocol file with extension .avpr.
+### Parquet
+- column format, nested
+- Interoperability, Space efficiency, Query efficiency
+- repetition :
+  -   required: exactly one occurrence
+  -   optional: 0 or 1 occurrence
+  -   repeated: 0 or more occurrences
+- One ideas behind Parquet is representing the schema as a tree, where the leaves of the tree always represent primitive types.
+
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/122495e9-8479-445c-b236-c333bada8016)
+
+#### Definition level
+- defines the number of optional fields in a path for a column
+
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/723c65f1-7174-4826-aefe-6c427ad6a820) ![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/5786160c-f1ec-449f-bd18-6aa05c129649)
+
+- The goal is to store the definition levels in as few bits as possible.
+
+#### Repetition level
+-  the repetition level is a marker of when to start a new list, and at which level.
+
+![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/f77f552e-ad68-496d-a9c4-c15d0a8d5b54)
+
+#### Reading & writing
+
+# MISC
+
+## Zookeeper
+### Intro
 
 
