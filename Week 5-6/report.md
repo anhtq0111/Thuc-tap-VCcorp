@@ -405,6 +405,24 @@ any sequence of operations that doesn’t require moving data across nodes, feed
 # MISC
 
 ## Zookeeper
-### Intro
-
+#### Intro
+- ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization and group services. 
+-  The basic building block of Zookeeper is a znode. A znode can store data (like a file) or have child znodes (like a directory).
+-  Zookeeper can be run as a single server in standalone mode or on a cluster of machines in replicated mode, called an ensemble.
+High availability in replicated mode is achieved by ensuring modifications to the znodes tree are replicated to a majority of the ensemble.
+If a minority of machines in the ensemble fail, at least one live machine in the ensemble will have the latest state
+- Zookeeper uses a protocol called Zab to implement this
+  -   The first phase involves selecting a leader.
+  -   In the second phase, all write requests are forwarded to the leader, which broadcasts the update to followers.
+#### Data model
+- the reads of and writes to a znode are atomic
+- Znodes have an associated access control list (ACL) that governs who can read or write a particular znode.
+- sequential znodes which have a sequence number attached as part of the name
+- Zookeeper can set watches on znodes that trigger when a znode is changed
+#### Consistency
+- Sequential Consistency: Updates from a client are applied in order
+- Atomicity: Modifications either succeed or fail. There are no partial successes or failures
+- Single System Image: A client sees the same view of the system irrespective of the Zookeeper server it connects to an ensemble.
+- Durability: Once an update has succeeded, it is persisted.
+- Timeliness: The clients view of the system is guaranteed to be up-to-date within a certain time bound
 
