@@ -60,6 +60,25 @@ Storage engine: Storage engines are MySQL components that handle the SQL operati
   -    Horizontal (scale-out across commodity servers)
   -    Mongodb, Cassandra, Hbase
 
+#### MySQl
+MySQL is an open-source RDBMS, now owned by Oracle, known for speed, reliability, and ease of use. MySQL is often used in LAMP stack (Linux, Apache, MySQL, PHP/Python/Perl) environments for small to medium-sized web applications.
+
+#### PostgreSQL
+PostgreSQL: An open-source object-relational database system with advanced features (e.g., support for custom functions and procedures as well as for complex queries, indexing, and transactions). PostgreSQL is best for large-scale applications, data warehousing, and geospatial data.
+
+#### SQL Server
+Microsoft SQL Server: A proprietary RDBMS by Microsoft, which is part of a suite with editions like Express, Standard, and Enterprise. Microsoft SQL Server integrates well with Microsoft's ecosystem and is suitable for diverse applications from small businesses to large enterprises.
+
+Transact SQL, or T-SQL, is the SQL dialect used 
+#### MongoDB
+MongoDB: popular document-oriented NoSQL database that stores data in flexible, JSON-like BSON documents, providing scalability and high performance for diverse data types.
+
+#### Cassandra
+Cassandra: A distributed and highly scalable NoSQL database designed for handling large amounts of data across multiple servers with a decentralized architecture, making it suitable for high-speed and high-volume applications.
+
+#### 
+
+
 ### CAP
 - Consistency:  all nodes see the same data simultaneously. All users see the same data at the same time, regardless of the node they connect to.
 - Availability: the system remains operational all of the time. Every request will get a response regardless of the individual state of the nodes.
