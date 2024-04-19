@@ -50,10 +50,28 @@ Storage engine: Storage engines are MySQL components that handle the SQL operati
 - Missing limit:
   - SELECT x, y FROM a -> SELECT TOP 100 x, y FROM a
 
+# Database
+- Sql:
+  -   Tables with fixed rows and columns
+  -    Vertical (scale-up with a larger server)
+- NoSql:
+  -    Document: JSON documents, Key-value: key-value pairs, Wide-column: tables with rows and dynamic columns, Graph: nodes and edges
+  -    Horizontal (scale-out across commodity servers)
+
+### CAP
+- Consistency:  all nodes see the same data simultaneously. All users see the same data at the same time, regardless of the node they connect to.
+- Availability: the system remains operational all of the time. Every request will get a response regardless of the individual state of the nodes.
+- Partition tolerance: the system as a whole continues to work, even if there is a breakdown in communication between individual nodes due to network partitions or node failures.
+
 ### ACID
 ACID stands for Atomicity, Consistency, Isolation, and Durability, is properties of transactions
 - Atomicity in a database transaction means that all the changes made during that transaction are treated as one "bundle" of changes. This means that when you are trying to modify your database, it's either all of the changes happen at the same time, or none of them happen at all.
 - Consistency in databases means that the data stored in the database is always in a valid and consistent state. For example, if the database contains any constraints such as primary keys, foreign keys, and so on, it should always conform to the rules surrounding the constraint.
 - The ability of multiple transactions to execute without interfering with one another is known as Isolation. The isolation level of a transaction determines how the changes made by that transaction are visible to other transactions.
-- Once committed, a transaction’s changes are permanent. This means the changes must be recorded such that data won’t be lost in a system crash. 
+- Once committed, a transaction’s changes are permanent. This means the changes must be recorded such that data won’t be lost in a system crash.
+
+### BASE 
+- Basically-availableA Database must offer availability by providing a response, whether it's an acknowledgment or even a failure message, to every incoming request
+- Soft-state: The database system may keep changing states as and when it receives new information
+- Eventualy-consistent: The elements within the system might not instantaneously display an identical value or state for a record at any given instance. However, they will gradually reconcile this disparity over time
 
