@@ -54,9 +54,11 @@ Storage engine: Storage engines are MySQL components that handle the SQL operati
 - Sql:
   -   Tables with fixed rows and columns
   -    Vertical (scale-up with a larger server)
+  -    MySQL, Oracle, PostgreSQL, Microsoft SQL Server
 - NoSql:
   -    Document: JSON documents, Key-value: key-value pairs, Wide-column: tables with rows and dynamic columns, Graph: nodes and edges
   -    Horizontal (scale-out across commodity servers)
+  -    Mongodb, Cassandra, Hbase
 
 ### CAP
 - Consistency:  all nodes see the same data simultaneously. All users see the same data at the same time, regardless of the node they connect to.
