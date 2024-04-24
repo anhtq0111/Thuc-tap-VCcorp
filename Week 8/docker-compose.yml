@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  flaskapp:
+    build: .
+    container_name: flaskapp
+    ports:
+      - "2410:5000"
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - NAME=flaskapp
+    networks:
+      - Flask-mysql
+
+networks:
+  Flask-mysql:
+    driver: bridge
