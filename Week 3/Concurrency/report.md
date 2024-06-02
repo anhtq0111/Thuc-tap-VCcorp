@@ -21,7 +21,11 @@
 
     ReadWriteLock: Khi một tiến trình đang đọc thì tiến trình khác không được ghi và ngược lại
 
-    StampedLock: Tương tự như ReadWriteLock nhưng hàm lock trả về một biến có kiểu giá trị là long
+    StampedLock: Tương tự như ReadWriteLock nhưng hàm lock trả về một biến có kiểu giá trị là long. Cho phép optimistics read: đọc nhưng không khóa hoàn toàn, kiểm tra
+  lại xem có thay đổi hay không.
+  
+  ![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/c0d05cf3-890a-438f-b9f4-ce4a1f614924)
+
 
     Semaphore: Giới hạn số permit bằng một giá trị n do đó không quá n thread được phép cùng thực thi
 
