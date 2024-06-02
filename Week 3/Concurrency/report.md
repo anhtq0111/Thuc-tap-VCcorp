@@ -14,7 +14,10 @@
 
 - Triển khai Lock: what is different bt read and write
 
-    ReentrantLock: Khóa loại trừ lẫn nhau, gần giống như synchronized
+    ReentrantLock: Khóa loại trừ lẫn nhau, gần giống như synchronized. Một thread có thể nắm giữ lock nhiều lần. Còn tính năng khóa công bằng -> chặn starvation
+
+  ![image](https://github.com/anhtq0111/Thuc-tap-VCcorp/assets/111045275/aa20aece-565f-473f-b7f2-9ea32c556166)
+
 
     ReadWriteLock: Khi một tiến trình đang đọc thì tiến trình khác không được ghi và ngược lại
 
